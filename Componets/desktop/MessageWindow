@@ -1,0 +1,156 @@
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Send, Smile } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import WindowFrame from './WindowFrame';
+
+export default function MessageWindow({ position, onClose, onFocus }) {
+  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState('');
+  const [sentMessages, setSentMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleSendMessage = () => {
+    if (!message.trim() || !email.trim()) return;
+    
+    const newMessage = {
+      id: Date.now(),
+      text: message,
+      email: email,
+      timestamp: new Date().toLocaleTimeString()
+    };
+    
+    setSentMessages(prev => [...prev, newMessage]);
+    setMessage('');
+    setIsTyping(true);
+    
+    // Simulate response after 2 seconds
+    setTimeout(() => {
+      setIsTyping(false);
+      setSentMessages(prev => [...prev, {
+        id: Date.now(),
+        text: "Thanks for reaching out! I'll get back to you soon. 😊",
+        isResponse: true,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }, 2000);
+  };
+
+  return (
+    <WindowFrame
+      title="Messages"
+      position={position}
+      onClose={onClose}
+      onFocus={onFocus}
+      width={450}
+      height={600}
+    >
+      <div className="h-full bg-gray-800 flex flex-col">
+        {/* Header */}
+        <div className="bg-gray-900/50 border-b border-gray-700 p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold">S</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-100">Chat with Scarlett</h3>
+              <p className="text-sm text-green-500">● Online</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Messages Area */}
+        <div className="flex-1 overflow-auto p-4 space-y-4">
+          {sentMessages.length === 0 && (
+            <div className="text-center text-gray-400 mt-8">
+              <Smile className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>Start a conversation!</p>
+            </div>
+          )}
+          
+          {sentMessages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex ${msg.isResponse ? 'justify-start' : 'justify-end'}`}
+            >
+              <div
+                className={`max-w-xs p-3 rounded-2xl ${
+                  msg.isResponse
+                    ? 'bg-gray-700 text-gray-100 shadow-sm'
+                    : 'bg-blue-500 text-white'
+                }`}
+              >
+                <p className="text-sm">{msg.text}</p>
+                <p className={`text-xs mt-1 ${msg.isResponse ? 'text-gray-400' : 'text-blue-100'}`}>
+                  {msg.timestamp}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+          
+          {isTyping && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex justify-start"
+            >
+              <div className="bg-gray-700 p-3 rounded-2xl shadow-sm">
+                <div className="flex items-center gap-1">
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="w-2 h-2 bg-gray-500 rounded-full"
+                      animate={{ y: [0, -4, 0] }}
+                      transition={{
+                        duration: 0.6,
+                        repeat: Infinity,
+                        delay: i * 0.2
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Input Area */}
+        <div className="bg-gray-900/50 border-t border-gray-700 p-4 space-y-3">
+          <Input
+            placeholder="Your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-gray-800 border-gray-600 text-white placeholder-gray-400"
+          />
+          <div className="flex gap-2">
+            <Textarea
+              placeholder="Type your message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="resize-none bg-gray-800 border-gray-600 text-white placeholder-gray-400"
+              rows={2}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+            />
+            <Button
+              onClick={handleSendMessage}
+              disabled={!message.trim() || !email.trim()}
+              className="bg-blue-500 hover:bg-blue-600 self-end"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </WindowFrame>
+  );
+}
