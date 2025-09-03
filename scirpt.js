@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let musicPlaying = false;
     
 
-    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1412496002463563837/nFUw1jOHMitqXthmQ5C1BZFiv5doVfc9ABsgJp8rHVapReq6_swzQZk3bgnsjAGSM9YL';
+    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1412856162797486282/QVurgp2icD332Nm2fzXW4fTs9rlb6PWEG5APAu_YsUMKiUiGKHJC2gSYcayNO_8Rr9b4';
     
 
     desktop.addEventListener('click', function(e) {
@@ -573,3 +573,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Scarletts code pls dont steal!');
 });
+
