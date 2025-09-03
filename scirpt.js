@@ -510,6 +510,66 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+
+    const loadingScreen = document.getElementById('loading-screen');
+    const progressFill = document.getElementById('progress-fill');
+    const loadingText = document.getElementById('loading-text');
+    
+
+    const loadingMessages = [
+        'Initializing...',
+        'Loading assets...',
+        'Preparing desktop...',
+        'Almost ready...',
+        'Welcome!'
+    ];
+    
+    let currentProgress = 0;
+    let messageIndex = 0;
+    
+
+    function updateProgress() {
+        if (currentProgress < 100) {
+
+            const increment = Math.random() * 15 + 5;
+            currentProgress = Math.min(currentProgress + increment, 100);
+            
+            progressFill.style.width = currentProgress + '%';
+            
+
+            const newMessageIndex = Math.floor((currentProgress / 100) * (loadingMessages.length - 1));
+            if (newMessageIndex !== messageIndex && newMessageIndex < loadingMessages.length) {
+                messageIndex = newMessageIndex;
+                loadingText.textContent = loadingMessages[messageIndex];
+            }
+            
+
+            if (currentProgress < 100) {
+                setTimeout(updateProgress, Math.random() * 200 + 100);
+            } else {
+
+                setTimeout(hideLoadingScreen, 500);
+            }
+        }
+    }
+    
+
+    function hideLoadingScreen() {
+        loadingScreen.classList.add('fade-out');
+        
+
+        setTimeout(() => {
+            if (loadingScreen && loadingScreen.parentNode) {
+                loadingScreen.parentNode.removeChild(loadingScreen);
+            }
+        }, 800);
+    }
+    
+
+    setTimeout(updateProgress, 300);
+
+
     
     console.log('Scarletts code pls dont steal!');
 });
