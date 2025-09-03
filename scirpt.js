@@ -511,12 +511,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Loading Screen Functionality
+
     const loadingScreen = document.getElementById('loading-screen');
     const progressFill = document.getElementById('progress-fill');
     const loadingText = document.getElementById('loading-text');
     
-    // Loading messages
+
     const loadingMessages = [
         'Initializing...',
         'Loading assets...',
@@ -528,37 +528,37 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentProgress = 0;
     let messageIndex = 0;
     
-    // Simulate loading progress
+
     function updateProgress() {
         if (currentProgress < 100) {
-            // Randomize progress increments for more realistic feel
+
             const increment = Math.random() * 15 + 5;
             currentProgress = Math.min(currentProgress + increment, 100);
             
             progressFill.style.width = currentProgress + '%';
             
-            // Update loading message based on progress
+
             const newMessageIndex = Math.floor((currentProgress / 100) * (loadingMessages.length - 1));
             if (newMessageIndex !== messageIndex && newMessageIndex < loadingMessages.length) {
                 messageIndex = newMessageIndex;
                 loadingText.textContent = loadingMessages[messageIndex];
             }
             
-            // Continue updating if not complete
+
             if (currentProgress < 100) {
                 setTimeout(updateProgress, Math.random() * 200 + 100);
             } else {
-                // Loading complete
+
                 setTimeout(hideLoadingScreen, 500);
             }
         }
     }
     
-    // Hide loading screen with smooth transition
+
     function hideLoadingScreen() {
         loadingScreen.classList.add('fade-out');
         
-        // Remove loading screen from DOM after transition
+
         setTimeout(() => {
             if (loadingScreen && loadingScreen.parentNode) {
                 loadingScreen.parentNode.removeChild(loadingScreen);
@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 800);
     }
     
-    // Start loading simulation
+
     setTimeout(updateProgress, 300);
 
 
